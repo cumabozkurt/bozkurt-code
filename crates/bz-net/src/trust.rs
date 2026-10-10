@@ -497,6 +497,14 @@ mod tests {
                 Action::Shell { script, .. } => Some(script.clone()),
                 _ => None,
             })
+            // plans for macOS/Linux joined on a Windows test host contain `\`
+            .map(|l| {
+                if cfg!(windows) {
+                    l.replace('\\', "/")
+                } else {
+                    l
+                }
+            })
             .collect()
     }
 
@@ -526,6 +534,10 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(
+        windows,
+        ignore = "Linux plans are only built on Linux; Windows paths get shell-quoted"
+    )]
     fn linux_nss_and_system() {
         let p = trust_plan(
             Os::Linux,

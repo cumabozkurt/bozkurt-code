@@ -558,7 +558,14 @@ mod tests {
             assert!(o.process.is_some());
         }
         drop(l);
-        assert!(is_free(port));
+        // The release is not always visible at once (seen on macOS runners); poll briefly.
+        let freed = (0..40).any(|_| {
+            is_free(port) || {
+                std::thread::sleep(std::time::Duration::from_millis(50));
+                false
+            }
+        });
+        assert!(freed, "port {port} still busy after drop");
         assert!(!port_owner(port).in_use);
         let u = UdpSocket::bind("127.0.0.1:0").unwrap();
         let up = u.local_addr().unwrap().port();

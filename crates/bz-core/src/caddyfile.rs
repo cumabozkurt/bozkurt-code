@@ -641,10 +641,8 @@ mod tests {
         let mut php = BTreeMap::new();
         php.insert(
             "shop".to_string(),
-            format!(
-                "unix/{}",
-                home.join("services/php-fpm-8.3/fpm.sock").display()
-            ),
+            // a literal Unix socket path: `Path::join` would insert `\` on Windows hosts
+            "unix//home/u/.bozkurt/services/php-fpm-8.3/fpm.sock".to_string(),
         );
         php.insert("blog".to_string(), "127.0.0.1:9082".to_string());
         php.insert("api".to_string(), "127.0.0.1:9084".to_string());
@@ -779,6 +777,10 @@ mod tests {
     fn field_injection_is_rejected_or_harmless() {
         const EVIL: &str = "\n}\n:1 {\n";
         let mut base = site("evil", SiteKind::Php);
+        if cfg!(windows) {
+            // `/home/...` is not absolute on Windows and validate() would reject the baseline
+            base.path = "C:/home/u/code/evil".into();
+        }
         base.root = Some("public".into());
         base.php = Some("8.3".into());
         base.framework = Some("laravel".into());
@@ -788,11 +790,7 @@ mod tests {
 
         type Mutate = fn(&mut Site, &str);
         let cases: [(&str, Mutate, bool); 11] = [
-            (
-                "path",
-                |s, e| s.path = format!("/home/u/code/evil{e}"),
-                true,
-            ),
+            ("path", |s, e| s.path = format!("{}{e}", s.path), true),
             ("root", |s, e| s.root = Some(format!("public{e}")), true),
             ("php", |s, e| s.php = Some(format!("8.3{e}")), true),
             ("node", |s, e| s.node = Some(format!("20{e}")), true),

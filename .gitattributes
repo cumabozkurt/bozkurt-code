@@ -1,0 +1,4 @@
+# Byte-exact test data: keep LF on every OS (Windows runners check out with core.autocrlf=true,
+# which turned the Caddyfile snapshots into CRLF and broke the snapshot tests).
+crates/*/tests/snapshots/** text eol=lf
+crates/*/tests/fixtures/** text eol=lf

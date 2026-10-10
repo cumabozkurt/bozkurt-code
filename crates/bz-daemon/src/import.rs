@@ -460,11 +460,11 @@ mod tests {
         std::fs::create_dir_all(valet.join("Sites")).unwrap();
         std::fs::write(
             valet.join("config.json"),
-            format!(
-                r#"{{"tld":"test","paths":["{}","{}"]}}"#,
-                valet.join("Sites").display(),
-                t.path().join("code").display()
-            ),
+            serde_json::json!({
+                "tld": "test",
+                "paths": [valet.join("Sites"), t.path().join("code")],
+            })
+            .to_string(),
         )
         .unwrap();
         let mamp = root.join("Applications/MAMP/conf/apache/extra");
@@ -485,9 +485,8 @@ mod tests {
         assert_eq!(s.vhosts[0].domain, "shop.test");
         assert_eq!(s.vhosts[0].php.as_deref(), Some("8.2"));
         assert_eq!(s.vhosts[1].source, "mamp");
-        assert!(s
-            .dns
-            .iter()
-            .any(|d| d.source == "valet" && d.tld == "test" && d.file.ends_with("resolver/test")));
+        assert!(s.dns.iter().any(|d| d.source == "valet"
+            && d.tld == "test"
+            && d.file.replace('\\', "/").ends_with("resolver/test")));
     }
 }

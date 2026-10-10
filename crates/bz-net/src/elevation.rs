@@ -612,7 +612,12 @@ mod tests {
             PathBuf::from("/b/1/etc/hosts")
         );
         let w = backup_target(Path::new("/b/1"), Path::new(r"C:\Windows\hosts"));
-        assert!(w.to_string_lossy().ends_with("Windows/hosts"), "{w:?}");
+        assert!(
+            w.to_string_lossy()
+                .replace('\\', "/")
+                .ends_with("Windows/hosts"),
+            "{w:?}"
+        );
         assert_eq!(
             plan().files_to_backup(),
             vec![PathBuf::from("/etc/x/it's.conf"), PathBuf::from("/etc/old")]

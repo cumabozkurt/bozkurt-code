@@ -649,7 +649,7 @@ async fn local_api_requires_token_for_non_browser_clients() {
 async fn local_api_rejects_cross_site_requests() {
     let t = T::new().await;
     let path = t.root.to_string_lossy().into_owned();
-    let body = format!(r#"{{"path":"{path}"}}"#);
+    let body = serde_json::json!({ "path": path }).to_string();
     // the CSRF shape from the audit: text/plain "simple" request from a foreign origin
     let (s, e) = status_of(
         t.raw

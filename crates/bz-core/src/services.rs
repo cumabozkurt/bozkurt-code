@@ -1087,14 +1087,15 @@ mod tests {
         let c = caddy_spec(&paths, p);
         assert_eq!(c.program, PathBuf::from("/h/caddy/bin/caddy"));
         assert_eq!(c.args[0], "run");
-        assert_eq!(c.env["XDG_DATA_HOME"], "/h/caddy/data");
+        // compare separator-agnostically: `Path::join` uses `\\` when the tests run on Windows
+        assert_eq!(c.env["XDG_DATA_HOME"].replace('\\', "/"), "/h/caddy/data");
         let r = ServiceLayout::new(&paths, &ServiceKind::Redis);
         assert_eq!(
             r.binary(p),
             PathBuf::from("/h/services/redis/dist/bin/valkey-server")
         );
         let fpm = ServiceLayout::new(&paths, &ServiceKind::PhpFpm("8.3".into()));
-        let conf = fpm_config(&fpm, Path::new("/h/logs"));
+        let conf = fpm_config(&fpm, Path::new("/h/logs")).replace('\\', "/");
         assert!(conf.contains("listen = /h/services/php-fpm-8.3/fpm.sock"));
         assert!(conf.contains("daemonize = no"));
     }

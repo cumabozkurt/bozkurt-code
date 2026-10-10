@@ -28,9 +28,22 @@
       document.querySelectorAll('.tabs [data-shot]').forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
       btn.setAttribute('aria-selected', 'true');
       img.src = 'screenshots/' + btn.getAttribute('data-shot') + '.png';
-      img.alt = btn.textContent.trim();
+      var label = btn.querySelector('.' + (root.getAttribute('data-lang') === 'tr' ? 'tr' : 'en'));
+      img.alt = (label || btn).textContent.trim();
       caption(btn);
     });
+  });
+
+  // Arrow-key navigation between screenshot tabs
+  var tabList = document.querySelector('.tabs');
+  if (tabList) tabList.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var tabs = Array.prototype.slice.call(tabList.querySelectorAll('[data-shot]'));
+    var i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    next.focus(); next.click(); next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    e.preventDefault();
   });
 
   // Copy buttons
@@ -38,9 +51,9 @@
     b.addEventListener('click', function () {
       var text = b.parentElement.querySelector('code').textContent;
       var done = function () {
-        var old = b.textContent;
-        b.textContent = root.getAttribute('data-lang') === 'tr' ? 'Kopyalandı' : 'Copied';
-        setTimeout(function () { b.textContent = old; }, 1400);
+        var tr = root.getAttribute('data-lang') === 'tr';
+        b.textContent = tr ? 'Kopyalandı' : 'Copied';
+        setTimeout(function () { b.textContent = root.getAttribute('data-lang') === 'tr' ? 'Kopyala' : 'Copy'; }, 1400);
       };
       if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
     });

@@ -1,0 +1,57 @@
+name: Pages
+
+# Publishes the static landing page in site/ to GitHub Pages
+# (https://cumabozkurt.github.io/bozkurt-code/). Screenshots and the logo are
+# copied in from docs/screenshots and apps/desktop/public so they are not duplicated.
+# Repository setting: Settings → Pages → Source = "GitHub Actions".
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "docs/screenshots/**"
+      - "apps/desktop/public/logo.svg"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - name: Assemble _site
+        run: |
+          mkdir -p _site/screenshots
+          cp site/index.html site/styles.css site/main.js site/.nojekyll _site/
+          cp docs/screenshots/*.png _site/screenshots/
+          cp apps/desktop/public/logo.svg _site/logo.svg
+          # every local asset referenced by the page must exist
+          grep -oE '(src|href)="[^"#:]+"' _site/index.html | sed -E 's/^(src|href)="//; s/"$//' | sort -u |
+            while read -r f; do [ -e "_site/$f" ] || { echo "::error::missing asset $f"; exit 1; }; done
+          ls -R _site
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5

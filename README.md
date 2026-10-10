@@ -12,10 +12,12 @@
 <p align="center">
   <a href="https://github.com/cumabozkurt/bozkurt-code/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/cumabozkurt/bozkurt-code/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/cumabozkurt/bozkurt-code/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/cumabozkurt/bozkurt-code"></a>
+  <a href="https://cumabozkurt.github.io/bozkurt-code/"><img alt="Website" src="https://img.shields.io/badge/website-cumabozkurt.github.io-22d3ee"></a>
   <a href="#license"><img alt="License: MIT OR Apache-2.0" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue"></a>
 </p>
 
 <p align="center">
+  <a href="https://cumabozkurt.github.io/bozkurt-code/"><b>Website</b></a> ·
   <a href="README.tr.md">Türkçe</a> ·
   <a href="docs/USER_GUIDE.md">User guide</a> ·
   <a href="docs/CLI.md">CLI</a> ·

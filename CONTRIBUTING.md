@@ -88,9 +88,13 @@ LAN daemon over plain HTTP, run `node apps/mobile/scripts/patch-android.mjs` aft
 | Job | Command |
 |---|---|
 | rustfmt | `cargo fmt --all -- --check` |
-| clippy + test (Linux, macOS, Windows) | `cargo clippy --all-targets -- -D warnings`, `cargo test --all-targets`, `cargo test --doc` |
-| node | `npm ci`, then `npm run lint/typecheck/build --workspaces --if-present` |
-| desktop-check | builds `apps/desktop`, stubs the sidecars, `cargo check --manifest-path apps/desktop/src-tauri/Cargo.toml` |
+| clippy + test (Linux, macOS, Windows) | `cargo clippy --locked --all-targets -- -D warnings`, `cargo test --locked --all-targets`, `cargo test --locked --doc` (workspace `default-members`, no Tauri crates) |
+| node | `npm ci`, then `npm run typecheck --workspaces --if-present` and `npm run build --workspaces --if-present` |
+| desktop-check | builds `apps/desktop` and `apps/mobile`, stubs the sidecars, `cargo check --locked -p bozkurt-desktop` (with `tauri.sidecar.conf.json`) and `cargo check --locked -p bozkurt-mobile` |
+| repo-lint | `node scripts/check-versions.mjs`, actionlint, shellcheck, PSScriptAnalyzer, JSON config parse, `python3 scripts/check-md-links.py` |
+
+`.github/workflows/pages.yml` publishes the landing page in `site/` to GitHub Pages on pushes to `main` that touch it
+(see [site/README.md](site/README.md)).
 
 Run the same before pushing:
 

@@ -12,10 +12,12 @@
 <p align="center">
   <a href="https://github.com/cumabozkurt/bozkurt-code/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/cumabozkurt/bozkurt-code/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/cumabozkurt/bozkurt-code/releases/latest"><img alt="Son sürüm" src="https://img.shields.io/github/v/release/cumabozkurt/bozkurt-code"></a>
+  <a href="https://cumabozkurt.github.io/bozkurt-code/"><img alt="Web sitesi" src="https://img.shields.io/badge/website-cumabozkurt.github.io-22d3ee"></a>
   <a href="#lisans"><img alt="Lisans: MIT OR Apache-2.0" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue"></a>
 </p>
 
 <p align="center">
+  <a href="https://cumabozkurt.github.io/bozkurt-code/?lang=tr"><b>Web sitesi</b></a> ·
   <a href="README.md">English</a> ·
   <a href="docs/USER_GUIDE.tr.md">Kullanım kılavuzu</a> ·
   <a href="docs/CLI.md">CLI</a> ·

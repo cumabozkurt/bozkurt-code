@@ -133,6 +133,31 @@ jobs:
           done
           rm -f "$ks"
 
+      # Without a release keystore the release APK is unsigned and Android refuses to install it.
+      # Ship an additional sideloadable APK signed with a throwaway key generated on the runner.
+      # (A new key per build: installing a later build over it needs an uninstall first.)
+      - name: Sideloadable APK (throwaway key, only without keystore secrets)
+        if: env.HAS_ANDROID_KEYSTORE != 'true'
+        shell: bash
+        run: |
+          bt="$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS"
+          ks="$RUNNER_TEMP/sideload.jks"
+          pw="$(openssl rand -hex 16)"
+          keytool -genkeypair -keystore "$ks" -storepass "$pw" -keypass "$pw" -alias sideload \
+            -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=BOZKURT CODE sideload build" >/dev/null
+          for apk in dist/android/*-unsigned.apk; do
+            [ -e "$apk" ] || continue
+            aligned="$RUNNER_TEMP/aligned.apk"
+            "$bt/zipalign" -p -f 4 "$apk" "$aligned"
+            out="${apk%-unsigned.apk}-sideload.apk"
+            "$bt/apksigner" sign --ks "$ks" --ks-key-alias sideload --ks-pass "pass:$pw" --key-pass "pass:$pw" \
+              --out "$out" "$aligned"
+            "$bt/apksigner" verify "$out"
+            rm -f "$aligned"
+          done
+          rm -f "$ks" dist/android/*.idsig
+          ls -la dist/android
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: bozkurt-mobile-android
@@ -145,12 +170,11 @@ jobs:
     env:
       HAS_IOS_SIGNING: ${{ secrets.IOS_CERTIFICATE != '' && secrets.IOS_MOBILE_PROVISION != '' && secrets.APPLE_DEVELOPMENT_TEAM != '' }}
       # `tauri ios init` refuses to generate the Xcode project without a development team
-      # ("apple.development-team is empty"), even for the unsigned simulator build.
-      HAS_APPLE_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM != '' }}
+      # ("apple.development-team is empty"), even for the unsigned simulator build. Without the
+      # secret a placeholder team id is used; simulator builds are not signed with it.
+      APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM || 'AAAAAAAAAA' }}
+      HAS_APPLE_TEAM: "true"
     steps:
-      - name: Skip notice (no APPLE_DEVELOPMENT_TEAM secret)
-        if: env.HAS_APPLE_TEAM != 'true'
-        run: echo "::notice::iOS build skipped - set the APPLE_DEVELOPMENT_TEAM secret to build the iOS app"
 
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         if: env.HAS_APPLE_TEAM == 'true'
@@ -180,8 +204,6 @@ jobs:
       - name: Generate Xcode project
         if: env.HAS_APPLE_TEAM == 'true'
         working-directory: ${{ env.MOBILE_DIR }}
-        env:
-          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
         run: |
           if [ ! -d src-tauri/gen/apple ]; then npm run tauri -- ios init --ci; fi
 

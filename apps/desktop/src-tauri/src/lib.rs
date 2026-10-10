@@ -515,9 +515,13 @@ fn open_terminal(path: String) -> Result<(), String> {
 
 const UPDATE_EVENT: &str = "bozkurt://update-available";
 
-/// Asks the release endpoint for a newer signed build and emits [`UPDATE_EVENT`]
-/// (`{version, current_version, notes}`) when there is one. Errors are logged, never fatal.
+/// Asks the release endpoint for a newer signed build. When there is one it emits
+/// [`UPDATE_EVENT`] (`{version, current_version, notes}`) and asks the user with a native
+/// dialog; on "Install and restart" the update is downloaded, its minisign signature is
+/// verified against the embedded public key by the updater plugin, installed, and the app
+/// restarts. "Later" does nothing until the next launch. Errors are logged, never fatal.
 async fn check_for_update(app: &AppHandle) {
+    use tauri_plugin_dialog::{DialogExt, MessageDialogButtons, MessageDialogKind};
     use tauri_plugin_updater::UpdaterExt;
     let updater = match app.updater() {
         Ok(u) => u,
@@ -526,20 +530,53 @@ async fn check_for_update(app: &AppHandle) {
             return;
         }
     };
-    match updater.check().await {
-        Ok(Some(update)) => {
-            let _ = app.emit(
-                UPDATE_EVENT,
-                json!({
-                    "version": update.version,
-                    "current_version": update.current_version,
-                    "notes": update.body,
-                }),
-            );
+    let update = match updater.check().await {
+        Ok(Some(update)) => update,
+        Ok(None) => return,
+        Err(e) => {
+            eprintln!("[bozkurt] update check failed: {e}");
+            return;
         }
-        Ok(None) => {}
-        Err(e) => eprintln!("[bozkurt] update check failed: {e}"),
-    }
+    };
+    let _ = app.emit(
+        UPDATE_EVENT,
+        json!({
+            "version": update.version,
+            "current_version": update.current_version,
+            "notes": update.body,
+        }),
+    );
+    let text = format!(
+        "BOZKURT CODE {} is available (you have {}).\n\nInstall it now? The app restarts after the update; running sites keep being served by bozkurtd.",
+        update.version, update.current_version
+    );
+    let h = app.clone();
+    app.dialog()
+        .message(text)
+        .title("Update available")
+        .kind(MessageDialogKind::Info)
+        .buttons(MessageDialogButtons::OkCancelCustom(
+            "Install and restart".into(),
+            "Later".into(),
+        ))
+        .show(move |install| {
+            if !install {
+                return;
+            }
+            tauri::async_runtime::spawn(async move {
+                match update.download_and_install(|_, _| {}, || {}).await {
+                    Ok(()) => h.restart(),
+                    Err(e) => {
+                        eprintln!("[bozkurt] update install failed: {e}");
+                        h.dialog()
+                            .message(format!("The update could not be installed: {e}"))
+                            .title("Update failed")
+                            .kind(MessageDialogKind::Error)
+                            .show(|_| {});
+                    }
+                }
+            });
+        });
 }
 
 pub fn run() {
@@ -602,7 +639,7 @@ pub fn run() {
             // Updater: its config (endpoint + pubkey) comes from tauri.release.conf.json, which
             // only release builds with a signing key get. Dev builds and forks have none, and the
             // plugin refuses to start without a pubkey, so it is registered only when configured.
-            // 1.0 only checks and tells the UI; installing stays a user action.
+            // Installing stays a user action: check_for_update asks before downloading.
             if app.config().plugins.0.contains_key("updater") {
                 handle.plugin(tauri_plugin_updater::Builder::new().build())?;
                 let h = handle.clone();

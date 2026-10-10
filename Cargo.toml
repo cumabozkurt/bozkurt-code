@@ -4,7 +4,7 @@ members = ["crates/bz-core", "crates/bz-net", "crates/bz-daemon", "crates/bz-cli
 default-members = ["crates/bz-core", "crates/bz-net", "crates/bz-daemon", "crates/bz-cli", "crates/bz-mcp"]
 
 [workspace.package]
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/cumabozkurt/bozkurt-code"

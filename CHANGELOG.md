@@ -10,12 +10,33 @@ flags and exit codes; the HTTP API v1 (`/api/v1`); MCP tool names, tiers and arg
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-10
+
+A packaging release: no changes to the `bz` CLI, HTTP API v1, MCP tools or configuration keys.
+
+### Added
+
+- **Signed in-app updates for the desktop app.** Release builds now carry the Tauri updater public key and ship
+  minisign-signed updater artifacts (`*.sig`) plus `latest.json`. On launch the desktop app checks
+  `releases/latest/download/latest.json`, asks with a native dialog ("Install and restart" / "Later"), verifies the
+  signature against the embedded key, installs and restarts (macOS `.app`, Windows NSIS, Linux AppImage; `.deb`/`.rpm`
+  installs update through the package manager or a new download). Installs of 1.0.0 had no updater configured, so moving
+  to 1.0.1 needs one manual download; later versions update in-app.
+- **Release-signed Android builds.** `mobile.yml` signs the APK (zipalign + apksigner, verified) and the AAB (jarsigner)
+  with the project's release keystore, so later versions install over 1.0.1 without uninstalling. The unsigned and
+  throwaway-key `*-sideload.apk` outputs are no longer published when the keystore is configured.
+
 ### Changed
 
 - **Mobile CI.** Android builds no longer fail in `setup-android` (the legacy `tools` package is gone); without a
-  release keystore an extra `*-sideload.apk`, signed with a throwaway key, is produced next to the unsigned APK/AAB. The
-  iOS simulator build runs without `APPLE_DEVELOPMENT_TEAM`. `mobile.yml` can attach builds to an existing release
-  (`workflow_dispatch` input `release_tag`).
+  release keystore (forks) an extra `*-sideload.apk`, signed with a throwaway key, is produced next to the unsigned
+  APK/AAB. The iOS simulator build runs without `APPLE_DEVELOPMENT_TEAM`. `mobile.yml` can attach builds to an existing
+  release (`workflow_dispatch` input `release_tag`).
+
+### Known limitations
+
+- macOS builds are not notarized and Windows installers are not Authenticode-signed (no paid certificates); expect a
+  Gatekeeper / SmartScreen prompt on first launch. iOS ships as an unsigned simulator build only.
 
 ## [1.0.0] - 2026-10-09
 
@@ -186,5 +207,6 @@ The first public release. There was no earlier tagged version, so everything bui
   lists the entries that were not imported (`; DNS not imported: …`). `bz import` explains this instead of sending a
   DNS-only selection.
 
-[Unreleased]: https://github.com/cumabozkurt/bozkurt-code/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/cumabozkurt/bozkurt-code/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/cumabozkurt/bozkurt-code/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cumabozkurt/bozkurt-code/releases/tag/v1.0.0

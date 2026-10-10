@@ -160,7 +160,7 @@ unsigned builds. Set these under *Settings → Secrets and variables → Actions
 | `APPLE_TEAM_ID` | release | Notarization | 10-character team ID |
 | `WINDOWS_CERTIFICATE` | release | Authenticode signing of msi/nsis | Base64 of a `.pfx`. It is imported to `CurrentUser\My`, and its thumbprint is passed to Tauri with SHA-256 digest and the DigiCert timestamp server. |
 | `WINDOWS_CERTIFICATE_PASSWORD` | release | Authenticode signing | Password of the `.pfx` |
-| `ANDROID_KEYSTORE` | mobile | Signing the APK (zipalign + apksigner) and AAB (jarsigner) | Base64 of a `.jks` keystore. Without it the APK/AAB are uploaded unsigned, plus a `*-sideload.apk` signed with a throwaway key generated on the runner (installable by sideloading; a later build signed with a different key needs an uninstall first, so set a real keystore before shipping updates). |
+| `ANDROID_KEYSTORE` | mobile | Signing the APK (zipalign + apksigner) and AAB (jarsigner) | Base64 of a `.jks` or PKCS#12 keystore (with `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`). With it only the signed APK/AAB are shipped (the unsigned outputs are replaced and every APK is checked with `apksigner verify`). Without it the APK/AAB are uploaded unsigned, plus a `*-sideload.apk` signed with a throwaway key generated on the runner (installable by sideloading; a later build signed with a different key needs an uninstall first, so set a real keystore before shipping updates). |
 | `ANDROID_KEYSTORE_PASSWORD` | mobile | Android signing | Keystore password |
 | `ANDROID_KEY_ALIAS` | mobile | Android signing | Key alias inside the keystore |
 | `ANDROID_KEY_PASSWORD` | mobile | Android signing | Key password |

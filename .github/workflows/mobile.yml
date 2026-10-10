@@ -117,21 +117,31 @@ jobs:
           ks="$RUNNER_TEMP/release.jks"
           echo "$ANDROID_KEYSTORE" | base64 --decode > "$ks"
           bt="$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS"
+          # The release keystore replaces the unsigned outputs: only signed APK/AAB are shipped,
+          # named without the "-unsigned" suffix, and every APK is verified after signing.
           for apk in dist/android/*.apk; do
             [ -e "$apk" ] || continue
-            aligned="${apk%.apk}-aligned.apk"
+            aligned="$RUNNER_TEMP/aligned.apk"
+            out="${apk%-unsigned.apk}"; out="${out%.apk}.apk"
+            if [ "$out" = "$apk" ]; then out="${apk%.apk}-signed.apk"; fi
             "$bt/zipalign" -p -f 4 "$apk" "$aligned"
             "$bt/apksigner" sign --ks "$ks" --ks-key-alias "$ANDROID_KEY_ALIAS" \
               --ks-pass env:ANDROID_KEYSTORE_PASSWORD --key-pass env:ANDROID_KEY_PASSWORD \
-              --out "${apk%.apk}-signed.apk" "$aligned"
+              --out "$out" "$aligned"
+            "$bt/apksigner" verify --print-certs "$out"
             rm -f "$aligned"
+            rm -f "$apk"
           done
           for aab in dist/android/*.aab; do
             [ -e "$aab" ] || continue
+            signed="$RUNNER_TEMP/signed.aab"
             jarsigner -keystore "$ks" -storepass "$ANDROID_KEYSTORE_PASSWORD" \
-              -keypass "$ANDROID_KEY_PASSWORD" -signedjar "${aab%.aab}-signed.aab" "$aab" "$ANDROID_KEY_ALIAS"
+              -keypass "$ANDROID_KEY_PASSWORD" -signedjar "$signed" "$aab" "$ANDROID_KEY_ALIAS"
+            jarsigner -verify "$signed" | tail -n1
+            mv -f "$signed" "$aab"
           done
-          rm -f "$ks"
+          rm -f "$ks" dist/android/*.idsig
+          ls -la dist/android
 
       # Without a release keystore the release APK is unsigned and Android refuses to install it.
       # Ship an additional sideloadable APK signed with a throwaway key generated on the runner.

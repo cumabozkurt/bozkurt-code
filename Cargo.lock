@@ -493,7 +493,7 @@ dependencies = [
 
 [[package]]
 name = "bozkurt-desktop"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "reqwest 0.12.28",
  "serde",
@@ -513,7 +513,7 @@ dependencies = [
 
 [[package]]
 name = "bozkurt-mobile"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "serde_json",
  "tauri",
@@ -588,7 +588,7 @@ dependencies = [
 
 [[package]]
 name = "bz-cli"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "anyhow",
  "bz-core",
@@ -611,7 +611,7 @@ dependencies = [
 
 [[package]]
 name = "bz-core"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -639,7 +639,7 @@ dependencies = [
 
 [[package]]
 name = "bz-daemon"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "anyhow",
  "axum",
@@ -667,7 +667,7 @@ dependencies = [
 
 [[package]]
 name = "bz-mcp"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "bz-cli",
  "bz-core",
@@ -678,7 +678,7 @@ dependencies = [
 
 [[package]]
 name = "bz-net"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "chrono",
  "hex",

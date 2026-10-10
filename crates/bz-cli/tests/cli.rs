@@ -12,6 +12,8 @@ fn bz(m: &Mock, args: &[&str]) -> Output {
         .args(args)
         .env("BOZKURT_HOME", m.home.path())
         .env("HOME", m.home.path())
+        // `bz mcp register` resolves the user home from USERPROFILE on Windows
+        .env("USERPROFILE", m.home.path())
         .env("NO_COLOR", "1")
         .env("LANG", "C")
         .env_remove("LC_ALL")

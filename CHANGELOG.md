@@ -8,6 +8,15 @@ Within 1.x, these interfaces only change in backwards-compatible ways (additions
 flags and exit codes; the HTTP API v1 (`/api/v1`); MCP tool names, tiers and arguments; the `config.toml` and
 `bozkurt.toml` keys; the `$BOZKURT_HOME` layout. Breaking changes wait for 2.0 and are announced here first.
 
+## [Unreleased]
+
+### Changed
+
+- **Mobile CI.** Android builds no longer fail in `setup-android` (the legacy `tools` package is gone); without a
+  release keystore an extra `*-sideload.apk`, signed with a throwaway key, is produced next to the unsigned APK/AAB. The
+  iOS simulator build runs without `APPLE_DEVELOPMENT_TEAM`. `mobile.yml` can attach builds to an existing release
+  (`workflow_dispatch` input `release_tag`).
+
 ## [1.0.0] - 2026-10-09
 
 The first public release. There was no earlier tagged version, so everything built before it is listed here.
@@ -177,4 +186,5 @@ The first public release. There was no earlier tagged version, so everything bui
   lists the entries that were not imported (`; DNS not imported: …`). `bz import` explains this instead of sending a
   DNS-only selection.
 
+[Unreleased]: https://github.com/cumabozkurt/bozkurt-code/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/cumabozkurt/bozkurt-code/releases/tag/v1.0.0

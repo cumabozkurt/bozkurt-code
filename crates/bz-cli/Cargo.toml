@@ -28,7 +28,7 @@ reqwest = { workspace = true, features = ["blocking"] }
 clap = { version = "4.5", features = ["derive", "env"] }
 clap_complete = "4.5"
 indicatif = "0.17"
-comfy-table = { version = "7", features = ["custom_styling"] }
+comfy-table = { version = "8", features = ["custom_styling"] }
 tungstenite = { version = "0.24", default-features = false, features = ["handshake"] }
 ctrlc = "3"
 qrcode = { version = "0.14", default-features = false }

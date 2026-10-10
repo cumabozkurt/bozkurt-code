@@ -91,7 +91,7 @@ jobs:
           cargo metadata --format-version 1 --locked > "$RUNNER_TEMP/metadata.json"
           python3 scripts/third-party-licenses.py --metadata "$RUNNER_TEMP/metadata.json" > THIRD_PARTY_LICENSES.md
           wc -c THIRD_PARTY_LICENSES.md
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: third-party-licenses
           path: THIRD_PARTY_LICENSES.md
@@ -370,7 +370,7 @@ jobs:
             target/${{ matrix.target }}/release/bundle/**/*.AppImage
 
       - name: Keep bundles as workflow artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: bundles-${{ matrix.target }}
           if-no-files-found: warn

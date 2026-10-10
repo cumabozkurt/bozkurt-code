@@ -1,0 +1,27 @@
+[package]
+name = "bz-mcp"
+description = "`bozkurt-mcp`: stdio Model Context Protocol server for bozkurtd (BOZKURT CODE)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+[lib]
+name = "bz_mcp"
+path = "src/lib.rs"
+
+[[bin]]
+name = "bozkurt-mcp"
+path = "src/main.rs"
+
+[dependencies]
+bz-cli = { path = "../bz-cli" }
+bz-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3"

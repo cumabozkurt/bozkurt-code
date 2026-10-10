@@ -1,0 +1,16 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "bundle": {
+    "createUpdaterArtifacts": true,
+    "resources": {
+      "../../../THIRD_PARTY_LICENSES.md": "THIRD_PARTY_LICENSES.md"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "REPLACED_IN_CI_FROM_REPO_VARIABLE_TAURI_UPDATER_PUBKEY",
+      "endpoints": ["https://github.com/cumabozkurt/bozkurt-code/releases/latest/download/latest.json"],
+      "windows": { "installMode": "passive" }
+    }
+  }
+}

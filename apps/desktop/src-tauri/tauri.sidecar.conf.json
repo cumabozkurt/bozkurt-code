@@ -1,0 +1,6 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "bundle": {
+    "externalBin": ["binaries/bozkurtd", "binaries/bz", "binaries/bozkurt-mcp"]
+  }
+}

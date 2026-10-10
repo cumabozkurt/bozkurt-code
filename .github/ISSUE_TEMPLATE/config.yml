@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/cumabozkurt/bozkurt-code/security/advisories/new
+    about: Please report security issues privately (see SECURITY.md).
+  - name: Questions & ideas
+    url: https://github.com/cumabozkurt/bozkurt-code/discussions
+    about: Ask and discuss in GitHub Discussions.

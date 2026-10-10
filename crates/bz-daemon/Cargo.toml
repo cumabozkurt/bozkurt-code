@@ -1,0 +1,42 @@
+[package]
+name = "bz-daemon"
+description = "BOZKURT CODE daemon (bozkurtd): HTTP API v1 + WebSocket events over bz-core and bz-net"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+[[bin]]
+name = "bozkurtd"
+path = "src/main.rs"
+
+[dependencies]
+bz-core = { workspace = true }
+bz-net = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+reqwest = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+toml = { workspace = true }
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "query", "tokio", "ws"] }
+tower-http = { version = "0.6", features = ["cors"] }
+futures-util = { version = "0.3", default-features = false, features = ["std", "sink"] }
+mdns-sd = "0.13"
+if-addrs = "0.13"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[dev-dependencies]
+tempfile = "3"
+tokio-tungstenite = { version = "0.29", default-features = false, features = ["connect"] }

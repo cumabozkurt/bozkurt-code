@@ -1,0 +1,578 @@
+[
+ {
+  "is_dir": true,
+  "full_path": "/static-php-cli/bulk/license/",
+  "name": "license/",
+  "size": "-",
+  "last_modified": "2026-07-07 05:34:44",
+  "download_count": "",
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/README.txt",
+  "name": "README.txt",
+  "size": "978B",
+  "last_modified": "2026-07-07 05:34:44",
+  "download_count": 2550,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/build-extensions.json",
+  "name": "build-extensions.json",
+  "size": "822B",
+  "last_modified": "2026-07-07 05:34:44",
+  "download_count": 2754,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/build-libraries.json",
+  "name": "build-libraries.json",
+  "size": "770B",
+  "last_modified": "2026-07-07 05:34:44",
+  "download_count": 277,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-cli-linux-aarch64.tar.gz",
+  "name": "php-8.0.30-cli-linux-aarch64.tar.gz",
+  "size": "24M",
+  "last_modified": "2024-11-01 08:30:22",
+  "download_count": 157,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-cli-linux-x86_64.tar.gz",
+  "name": "php-8.0.30-cli-linux-x86_64.tar.gz",
+  "size": "24.3M",
+  "last_modified": "2024-11-01 06:28:57",
+  "download_count": 2085,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-cli-macos-aarch64.tar.gz",
+  "name": "php-8.0.30-cli-macos-aarch64.tar.gz",
+  "size": "26.3M",
+  "last_modified": "2024-11-01 06:16:50",
+  "download_count": 1621,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-cli-macos-x86_64.tar.gz",
+  "name": "php-8.0.30-cli-macos-x86_64.tar.gz",
+  "size": "26.8M",
+  "last_modified": "2024-11-01 06:26:18",
+  "download_count": 668,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-fpm-linux-aarch64.tar.gz",
+  "name": "php-8.0.30-fpm-linux-aarch64.tar.gz",
+  "size": "24.1M",
+  "last_modified": "2024-11-01 08:30:22",
+  "download_count": 92,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-fpm-linux-x86_64.tar.gz",
+  "name": "php-8.0.30-fpm-linux-x86_64.tar.gz",
+  "size": "24.3M",
+  "last_modified": "2024-11-01 06:28:57",
+  "download_count": 370,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-fpm-macos-aarch64.tar.gz",
+  "name": "php-8.0.30-fpm-macos-aarch64.tar.gz",
+  "size": "26.3M",
+  "last_modified": "2024-11-01 06:16:49",
+  "download_count": 1499,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-fpm-macos-x86_64.tar.gz",
+  "name": "php-8.0.30-fpm-macos-x86_64.tar.gz",
+  "size": "26.8M",
+  "last_modified": "2024-11-01 06:26:19",
+  "download_count": 626,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-micro-linux-aarch64.tar.gz",
+  "name": "php-8.0.30-micro-linux-aarch64.tar.gz",
+  "size": "24M",
+  "last_modified": "2024-11-01 08:30:22",
+  "download_count": 71,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-micro-linux-x86_64.tar.gz",
+  "name": "php-8.0.30-micro-linux-x86_64.tar.gz",
+  "size": "24.2M",
+  "last_modified": "2024-11-01 06:28:57",
+  "download_count": 106,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-micro-macos-aarch64.tar.gz",
+  "name": "php-8.0.30-micro-macos-aarch64.tar.gz",
+  "size": "28.1M",
+  "last_modified": "2024-11-01 06:16:51",
+  "download_count": 64,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.0.30-micro-macos-x86_64.tar.gz",
+  "name": "php-8.0.30-micro-macos-x86_64.tar.gz",
+  "size": "28.5M",
+  "last_modified": "2024-11-01 06:26:19",
+  "download_count": 65,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-cli-linux-aarch64.tar.gz",
+  "name": "php-8.3.25-cli-linux-aarch64.tar.gz",
+  "size": "28.9M",
+  "last_modified": "2025-09-25 03:51:22",
+  "download_count": 72,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-cli-linux-x86_64.tar.gz",
+  "name": "php-8.3.25-cli-linux-x86_64.tar.gz",
+  "size": "28.2M",
+  "last_modified": "2025-09-25 03:56:18",
+  "download_count": 484,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-cli-macos-aarch64.tar.gz",
+  "name": "php-8.3.25-cli-macos-aarch64.tar.gz",
+  "size": "32.6M",
+  "last_modified": "2025-09-25 03:52:01",
+  "download_count": 123,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-cli-macos-x86_64.tar.gz",
+  "name": "php-8.3.25-cli-macos-x86_64.tar.gz",
+  "size": "33.7M",
+  "last_modified": "2025-09-10 03:17:54",
+  "download_count": 81,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-fpm-linux-aarch64.tar.gz",
+  "name": "php-8.3.25-fpm-linux-aarch64.tar.gz",
+  "size": "28.9M",
+  "last_modified": "2025-09-25 03:51:22",
+  "download_count": 51,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-fpm-linux-x86_64.tar.gz",
+  "name": "php-8.3.25-fpm-linux-x86_64.tar.gz",
+  "size": "28.2M",
+  "last_modified": "2025-09-25 03:56:18",
+  "download_count": 96,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-fpm-macos-aarch64.tar.gz",
+  "name": "php-8.3.25-fpm-macos-aarch64.tar.gz",
+  "size": "32.6M",
+  "last_modified": "2025-09-25 03:52:01",
+  "download_count": 102,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-fpm-macos-x86_64.tar.gz",
+  "name": "php-8.3.25-fpm-macos-x86_64.tar.gz",
+  "size": "33.7M",
+  "last_modified": "2025-09-10 03:17:54",
+  "download_count": 67,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-micro-linux-aarch64.tar.gz",
+  "name": "php-8.3.25-micro-linux-aarch64.tar.gz",
+  "size": "28.9M",
+  "last_modified": "2025-09-25 03:51:22",
+  "download_count": 45,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-micro-linux-x86_64.tar.gz",
+  "name": "php-8.3.25-micro-linux-x86_64.tar.gz",
+  "size": "28.2M",
+  "last_modified": "2025-09-25 03:56:18",
+  "download_count": 53,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-micro-macos-aarch64.tar.gz",
+  "name": "php-8.3.25-micro-macos-aarch64.tar.gz",
+  "size": "32.5M",
+  "last_modified": "2025-09-25 03:52:01",
+  "download_count": 47,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.25-micro-macos-x86_64.tar.gz",
+  "name": "php-8.3.25-micro-macos-x86_64.tar.gz",
+  "size": "33.7M",
+  "last_modified": "2025-09-10 03:17:54",
+  "download_count": 43,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-cli-linux-aarch64.tar.gz",
+  "name": "php-8.3.26-cli-linux-aarch64.tar.gz",
+  "size": "28.9M",
+  "last_modified": "2025-10-19 03:55:25",
+  "download_count": 76,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-cli-linux-x86_64.tar.gz",
+  "name": "php-8.3.26-cli-linux-x86_64.tar.gz",
+  "size": "28.2M",
+  "last_modified": "2025-10-19 03:58:57",
+  "download_count": 383,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-cli-macos-aarch64.tar.gz",
+  "name": "php-8.3.26-cli-macos-aarch64.tar.gz",
+  "size": "33.1M",
+  "last_modified": "2025-10-19 04:08:15",
+  "download_count": 122,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-cli-macos-x86_64.tar.gz",
+  "name": "php-8.3.26-cli-macos-x86_64.tar.gz",
+  "size": "33.7M",
+  "last_modified": "2025-10-19 04:13:00",
+  "download_count": 64,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-fpm-linux-aarch64.tar.gz",
+  "name": "php-8.3.26-fpm-linux-aarch64.tar.gz",
+  "size": "28.9M",
+  "last_modified": "2025-10-19 03:55:25",
+  "download_count": 43,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-fpm-linux-x86_64.tar.gz",
+  "name": "php-8.3.26-fpm-linux-x86_64.tar.gz",
+  "size": "28.3M",
+  "last_modified": "2025-10-19 03:58:57",
+  "download_count": 88,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-fpm-macos-aarch64.tar.gz",
+  "name": "php-8.3.26-fpm-macos-aarch64.tar.gz",
+  "size": "33.2M",
+  "last_modified": "2025-10-19 04:08:14",
+  "download_count": 80,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-fpm-macos-x86_64.tar.gz",
+  "name": "php-8.3.26-fpm-macos-x86_64.tar.gz",
+  "size": "33.8M",
+  "last_modified": "2025-10-19 04:13:08",
+  "download_count": 53,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-micro-linux-aarch64.tar.gz",
+  "name": "php-8.3.26-micro-linux-aarch64.tar.gz",
+  "size": "28.8M",
+  "last_modified": "2025-10-19 03:55:25",
+  "download_count": 40,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-micro-linux-x86_64.tar.gz",
+  "name": "php-8.3.26-micro-linux-x86_64.tar.gz",
+  "size": "28.2M",
+  "last_modified": "2025-10-19 03:58:57",
+  "download_count": 43,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-micro-macos-aarch64.tar.gz",
+  "name": "php-8.3.26-micro-macos-aarch64.tar.gz",
+  "size": "33.1M",
+  "last_modified": "2025-10-19 04:08:15",
+  "download_count": 37,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.3.26-micro-macos-x86_64.tar.gz",
+  "name": "php-8.3.26-micro-macos-x86_64.tar.gz",
+  "size": "33.7M",
+  "last_modified": "2025-10-19 04:13:06",
+  "download_count": 36,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-cli-linux-aarch64.tar.gz",
+  "name": "php-8.4.22-cli-linux-aarch64.tar.gz",
+  "size": "30M",
+  "last_modified": "2026-07-01 05:44:18",
+  "download_count": 56,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-cli-linux-x86_64.tar.gz",
+  "name": "php-8.4.22-cli-linux-x86_64.tar.gz",
+  "size": "29.6M",
+  "last_modified": "2026-07-01 06:16:58",
+  "download_count": 501,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-cli-macos-aarch64.tar.gz",
+  "name": "php-8.4.22-cli-macos-aarch64.tar.gz",
+  "size": "34.5M",
+  "last_modified": "2026-07-01 07:02:00",
+  "download_count": 295,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-cli-macos-x86_64.tar.gz",
+  "name": "php-8.4.22-cli-macos-x86_64.tar.gz",
+  "size": "35.4M",
+  "last_modified": "2026-07-01 06:35:03",
+  "download_count": 82,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-fpm-linux-aarch64.tar.gz",
+  "name": "php-8.4.22-fpm-linux-aarch64.tar.gz",
+  "size": "30.1M",
+  "last_modified": "2026-07-01 05:44:19",
+  "download_count": 6,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-fpm-linux-x86_64.tar.gz",
+  "name": "php-8.4.22-fpm-linux-x86_64.tar.gz",
+  "size": "29.6M",
+  "last_modified": "2026-07-01 06:16:52",
+  "download_count": 125,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-fpm-macos-aarch64.tar.gz",
+  "name": "php-8.4.22-fpm-macos-aarch64.tar.gz",
+  "size": "34.5M",
+  "last_modified": "2026-07-01 07:01:58",
+  "download_count": 135,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-fpm-macos-x86_64.tar.gz",
+  "name": "php-8.4.22-fpm-macos-x86_64.tar.gz",
+  "size": "35.4M",
+  "last_modified": "2026-07-01 06:34:59",
+  "download_count": 24,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-micro-linux-aarch64.tar.gz",
+  "name": "php-8.4.22-micro-linux-aarch64.tar.gz",
+  "size": "30M",
+  "last_modified": "2026-07-01 05:44:19",
+  "download_count": 2,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-micro-linux-x86_64.tar.gz",
+  "name": "php-8.4.22-micro-linux-x86_64.tar.gz",
+  "size": "29.6M",
+  "last_modified": "2026-07-01 06:16:52",
+  "download_count": 7,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-micro-macos-aarch64.tar.gz",
+  "name": "php-8.4.22-micro-macos-aarch64.tar.gz",
+  "size": "34.5M",
+  "last_modified": "2026-07-01 07:02:01",
+  "download_count": 3,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.22-micro-macos-x86_64.tar.gz",
+  "name": "php-8.4.22-micro-macos-x86_64.tar.gz",
+  "size": "35.4M",
+  "last_modified": "2026-07-01 06:35:03",
+  "download_count": 3,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-cli-linux-aarch64.tar.gz",
+  "name": "php-8.4.23-cli-linux-aarch64.tar.gz",
+  "size": "30M",
+  "last_modified": "2026-07-07 05:11:03",
+  "download_count": 320,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-cli-linux-x86_64.tar.gz",
+  "name": "php-8.4.23-cli-linux-x86_64.tar.gz",
+  "size": "29.6M",
+  "last_modified": "2026-07-07 05:34:48",
+  "download_count": 7368,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-cli-macos-aarch64.tar.gz",
+  "name": "php-8.4.23-cli-macos-aarch64.tar.gz",
+  "size": "34.5M",
+  "last_modified": "2026-07-07 06:20:29",
+  "download_count": 1836,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-cli-macos-x86_64.tar.gz",
+  "name": "php-8.4.23-cli-macos-x86_64.tar.gz",
+  "size": "35.4M",
+  "last_modified": "2026-07-07 06:39:48",
+  "download_count": 456,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-fpm-linux-aarch64.tar.gz",
+  "name": "php-8.4.23-fpm-linux-aarch64.tar.gz",
+  "size": "30.1M",
+  "last_modified": "2026-07-07 05:11:03",
+  "download_count": 45,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-fpm-linux-x86_64.tar.gz",
+  "name": "php-8.4.23-fpm-linux-x86_64.tar.gz",
+  "size": "29.6M",
+  "last_modified": "2026-07-07 05:34:49",
+  "download_count": 467,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-fpm-macos-aarch64.tar.gz",
+  "name": "php-8.4.23-fpm-macos-aarch64.tar.gz",
+  "size": "34.5M",
+  "last_modified": "2026-07-07 06:20:29",
+  "download_count": 459,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-fpm-macos-x86_64.tar.gz",
+  "name": "php-8.4.23-fpm-macos-x86_64.tar.gz",
+  "size": "35.4M",
+  "last_modified": "2026-07-07 06:39:46",
+  "download_count": 156,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-micro-linux-aarch64.tar.gz",
+  "name": "php-8.4.23-micro-linux-aarch64.tar.gz",
+  "size": "30M",
+  "last_modified": "2026-07-07 05:11:03",
+  "download_count": 21,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-micro-linux-x86_64.tar.gz",
+  "name": "php-8.4.23-micro-linux-x86_64.tar.gz",
+  "size": "29.6M",
+  "last_modified": "2026-07-07 05:34:48",
+  "download_count": 100,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-micro-macos-aarch64.tar.gz",
+  "name": "php-8.4.23-micro-macos-aarch64.tar.gz",
+  "size": "34.5M",
+  "last_modified": "2026-07-07 06:20:29",
+  "download_count": 19,
+  "is_parent": false
+ },
+ {
+  "is_dir": false,
+  "full_path": "/static-php-cli/bulk/php-8.4.23-micro-macos-x86_64.tar.gz",
+  "name": "php-8.4.23-micro-macos-x86_64.tar.gz",
+  "size": "35.4M",
+  "last_modified": "2026-07-07 06:39:46",
+  "download_count": 4,
+  "is_parent": false
+ }
+]

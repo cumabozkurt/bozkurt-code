@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/mobile-schema.json",
+  "identifier": "default",
+  "description": "Mobile companion: opener, deep links",
+  "windows": ["main"],
+  "permissions": ["core:default", "opener:default", "deep-link:default"]
+}

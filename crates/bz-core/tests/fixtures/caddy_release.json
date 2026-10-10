@@ -1,0 +1,56 @@
+{
+ "tag_name": "v2.11.7",
+ "prerelease": false,
+ "draft": false,
+ "published_at": "2026-10-03T05:58:33Z",
+ "assets": [
+  {
+   "name": "caddy_2.11.7_checksums.txt",
+   "browser_download_url": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_checksums.txt",
+   "size": 6769,
+   "digest": "sha256:5d27b76b95f496638d79208c55250317b8755fd9e90005f7466aa32956944a90"
+  },
+  {
+   "name": "caddy_2.11.7_linux_amd64.deb",
+   "browser_download_url": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_linux_amd64.deb",
+   "size": 18142322,
+   "digest": "sha256:a22b914ffd1958da42bc7ab13b7b62c6100634e0798ab594891d2d61d53ba749"
+  },
+  {
+   "name": "caddy_2.11.7_linux_amd64.tar.gz",
+   "browser_download_url": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_linux_amd64.tar.gz",
+   "size": 18113754,
+   "digest": "sha256:727b91701a392de6ebc5027509f548bf39979e5216340d0faed8fa5e69c84f8b"
+  },
+  {
+   "name": "caddy_2.11.7_linux_arm64.deb",
+   "browser_download_url": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_linux_arm64.deb",
+   "size": 16511820,
+   "digest": "sha256:ca8ae5a50439642d7672344b4ec64e47cbddf81beb5da302420a78522eb5a47e"
+  },
+  {
+   "name": "caddy_2.11.7_linux_arm64.tar.gz",
+   "browser_download_url": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_linux_arm64.tar.gz",
+   "size": 16485181,
+   "digest": "sha256:d8fc6d179a5d283028a472a5618564f6ad8a86fed513e64f032b3b0b7cc45e42"
+  },
+  {
+   "name": "caddy_2.11.7_mac_amd64.tar.gz",
+   "browser_download_url": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_mac_amd64.tar.gz",
+   "size": 18551994,
+   "digest": "sha256:110c53e5c093e4cfce6eda787f94f23bef913c309f620fab26b4f678031841ad"
+  },
+  {
+   "name": "caddy_2.11.7_mac_arm64.tar.gz",
+   "browser_download_url": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_mac_arm64.tar.gz",
+   "size": 17297953,
+   "digest": "sha256:cda3030e5d5b13eb9f0b6fb541037f633bddd958c070c5f561d7a5cccb581665"
+  },
+  {
+   "name": "caddy_2.11.7_windows_amd64.zip",
+   "browser_download_url": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_windows_amd64.zip",
+   "size": 18479498,
+   "digest": "sha256:0a1edc0b799512051c57071ce0e798d3f2cf67dc98171366f1d2b326072e3b06"
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+[package]
+name = "bozkurt-desktop"
+description = "BOZKURT CODE desktop app (Tauri 2 shell around packages/ui)"
+version.workspace = true
+edition.workspace = true
+# tauri 2.12 and tauri-plugin-updater 2.13 need rustc 1.90; the core crates stay on 1.89.
+rust-version = "1.90"
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+[lib]
+name = "bozkurt_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "bozkurt-code"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-shell = "2"
+tauri-plugin-deep-link = "2"
+tauri-plugin-autostart = "2"
+tauri-plugin-updater = "2"
+tauri-plugin-single-instance = { version = "2", features = ["deep-link"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+reqwest = { workspace = true }
+tokio = { version = "1", features = ["time"] }

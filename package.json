@@ -1,0 +1,15 @@
+{
+  "name": "bozkurt-code",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT OR Apache-2.0",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "build": "npm run build -w @bozkurt/ui && npm run build -w @bozkurt/desktop && npm run build -w @bozkurt/mobile",
+    "typecheck": "npm run typecheck -w @bozkurt/ui && npm run typecheck -w @bozkurt/desktop && npm run typecheck -w @bozkurt/mobile",
+    "dev": "npm run dev -w @bozkurt/desktop",
+    "dev:mock": "npm run dev:mock -w @bozkurt/desktop",
+    "tauri": "npm run tauri -w @bozkurt/desktop"
+  },
+  "engines": { "node": ">=20" }
+}

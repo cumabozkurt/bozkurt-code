@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "BOZKURT CODE",
+  "mainBinaryName": "bozkurt-code",
+  "version": "1.0.0",
+  "identifier": "tr.cumabozkurt.bozkurtcode",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "label": "main",
+        "title": "BOZKURT CODE",
+        "width": 1240,
+        "height": 800,
+        "minWidth": 900,
+        "minHeight": 600,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; connect-src 'self' ipc: http://ipc.localhost http://127.0.0.1:* ws://127.0.0.1:* http://localhost:* ws://localhost:*; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg", "msi", "nsis", "deb", "rpm", "appimage"],
+    "publisher": "Cuma Bozkurt and contributors",
+    "copyright": "Copyright © 2026 Cuma Bozkurt and contributors",
+    "category": "DeveloperTool",
+    "shortDescription": "Local development environment",
+    "longDescription": "BOZKURT CODE: PHP, Node, Python, Bun, Go, Caddy, MariaDB, PostgreSQL, Redis, Mailpit, local DNS and HTTPS in one app.",
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "macOS": { "minimumSystemVersion": "11.0" },
+    "windows": { "nsis": { "installMode": "currentUser" } }
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": { "schemes": ["bozkurt"] }
+    }
+  }
+}

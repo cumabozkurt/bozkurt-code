@@ -1,0 +1,265 @@
+name: Mobile
+
+# Builds the Tauri 2 mobile companion (apps/mobile).
+#  - Android: release APK + AAB. Unsigned by default; signed with apksigner /
+#    jarsigner when ANDROID_KEYSTORE secrets are present.
+#  - iOS: unsigned simulator .app by default; signed IPA when the Apple
+#    certificate + provisioning profile secrets are present.
+#  - On `v*` tags the outputs are attached to the draft release created by
+#    release.yml (after that workflow finishes) and SHA256SUMS is recomputed.
+# `apps/*/src-tauri/gen/` is git-ignored, so the native projects are generated
+# on the runner with `tauri <platform> init --ci`.
+# Android versionCode is derived by Tauri from the version: 1.0.0 -> 1000000.
+
+on:
+  push:
+    tags: ["v*"]
+  pull_request:
+    paths:
+      - "apps/mobile/**"
+      - "packages/ui/**"
+      - ".github/workflows/mobile.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  MOBILE_DIR: apps/mobile
+
+jobs:
+  android:
+    name: Android (APK + AAB)
+    runs-on: ubuntu-latest
+    env:
+      HAS_ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE != '' }}
+      ANDROID_PLATFORM: "platforms;android-34"
+      ANDROID_BUILD_TOOLS: "34.0.0"
+      ANDROID_NDK_VERSION: "27.2.12479018"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+
+      - name: Install SDK platform, build-tools and NDK
+        run: |
+          sdkmanager --install "$ANDROID_PLATFORM" "build-tools;$ANDROID_BUILD_TOOLS" "ndk;$ANDROID_NDK_VERSION"
+          echo "NDK_HOME=$ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION" >> "$GITHUB_ENV"
+
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          toolchain: stable
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          shared-key: mobile-android
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+
+      - name: Install npm dependencies
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Generate Android project
+        working-directory: ${{ env.MOBILE_DIR }}
+        run: |
+          if [ ! -d src-tauri/gen/android ]; then npm run tauri -- android init --ci; fi
+
+      - name: Allow cleartext HTTP to the LAN daemon (fails if nothing was patched)
+        run: node apps/mobile/scripts/patch-android.mjs
+
+      - name: Build APK + AAB
+        working-directory: ${{ env.MOBILE_DIR }}
+        run: npm run tauri -- android build --apk --aab --ci
+
+      - name: Collect outputs
+        shell: bash
+        run: |
+          mkdir -p dist/android
+          find "$MOBILE_DIR/src-tauri/gen/android/app/build/outputs" \
+            \( -name '*.apk' -o -name '*.aab' \) -exec cp {} dist/android/ \;
+          ls -la dist/android
+
+      - name: Sign APK/AAB (only when keystore secrets exist)
+        if: env.HAS_ANDROID_KEYSTORE == 'true'
+        shell: bash
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          ks="$RUNNER_TEMP/release.jks"
+          echo "$ANDROID_KEYSTORE" | base64 --decode > "$ks"
+          bt="$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS"
+          for apk in dist/android/*.apk; do
+            [ -e "$apk" ] || continue
+            aligned="${apk%.apk}-aligned.apk"
+            "$bt/zipalign" -p -f 4 "$apk" "$aligned"
+            "$bt/apksigner" sign --ks "$ks" --ks-key-alias "$ANDROID_KEY_ALIAS" \
+              --ks-pass env:ANDROID_KEYSTORE_PASSWORD --key-pass env:ANDROID_KEY_PASSWORD \
+              --out "${apk%.apk}-signed.apk" "$aligned"
+            rm -f "$aligned"
+          done
+          for aab in dist/android/*.aab; do
+            [ -e "$aab" ] || continue
+            jarsigner -keystore "$ks" -storepass "$ANDROID_KEYSTORE_PASSWORD" \
+              -keypass "$ANDROID_KEY_PASSWORD" -signedjar "${aab%.aab}-signed.aab" "$aab" "$ANDROID_KEY_ALIAS"
+          done
+          rm -f "$ks"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: bozkurt-mobile-android
+          path: dist/android/*
+          if-no-files-found: error
+
+  ios:
+    name: iOS
+    runs-on: macos-latest
+    env:
+      HAS_IOS_SIGNING: ${{ secrets.IOS_CERTIFICATE != '' && secrets.IOS_MOBILE_PROVISION != '' && secrets.APPLE_DEVELOPMENT_TEAM != '' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          toolchain: stable
+          targets: aarch64-apple-ios,aarch64-apple-ios-sim
+
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          shared-key: mobile-ios
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+
+      - name: Install npm dependencies
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Generate Xcode project
+        working-directory: ${{ env.MOBILE_DIR }}
+        env:
+          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
+        run: |
+          if [ ! -d src-tauri/gen/apple ]; then npm run tauri -- ios init --ci; fi
+
+      # --- default: unsigned simulator build ---------------------------------
+      # Built through the Tauri CLI: the generated Xcode project's "Build Rust Code"
+      # phase (`tauri ios xcode-script`) needs options written by a parent
+      # `tauri ios build|dev`, so a bare xcodebuild cannot build it.
+      - name: Build unsigned simulator app
+        if: env.HAS_IOS_SIGNING != 'true'
+        working-directory: ${{ env.MOBILE_DIR }}
+        run: |
+          npm run tauri -- ios build --target aarch64-sim --debug --ci
+          mkdir -p "$GITHUB_WORKSPACE/dist/ios"
+          app="$(find src-tauri/gen/apple/build -name '*.app' -type d -path '*simulator*' | head -n1)"
+          [ -n "$app" ] || app="$(find src-tauri/gen/apple/build -name '*.app' -type d | head -n1)"
+          if [ -z "$app" ]; then echo "::error::no .app produced under src-tauri/gen/apple/build"; exit 1; fi
+          ditto -c -k --keepParent "$app" "$GITHUB_WORKSPACE/dist/ios/bozkurt-mobile-simulator.zip"
+
+      # --- signed device build (only when secrets exist) ----------------------
+      - name: Import signing certificate and provisioning profile
+        if: env.HAS_IOS_SIGNING == 'true'
+        shell: bash
+        env:
+          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_MOBILE_PROVISION: ${{ secrets.IOS_MOBILE_PROVISION }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          kc="$RUNNER_TEMP/build.keychain-db"
+          kcpw="${KEYCHAIN_PASSWORD:-$(uuidgen)}"
+          echo "$IOS_CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security create-keychain -p "$kcpw" "$kc"
+          security set-keychain-settings -lut 21600 "$kc"
+          security unlock-keychain -p "$kcpw" "$kc"
+          security import "$RUNNER_TEMP/cert.p12" -P "$IOS_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$kc"
+          security set-key-partition-list -S apple-tool:,apple: -k "$kcpw" "$kc"
+          security list-keychains -d user -s "$kc" login.keychain
+          rm -f "$RUNNER_TEMP/cert.p12"
+          pp_dir="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$pp_dir"
+          echo "$IOS_MOBILE_PROVISION" | base64 --decode > "$pp_dir/bozkurt.mobileprovision"
+
+      - name: Build signed IPA
+        if: env.HAS_IOS_SIGNING == 'true'
+        working-directory: ${{ env.MOBILE_DIR }}
+        env:
+          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
+          IOS_EXPORT_METHOD: ${{ vars.IOS_EXPORT_METHOD || 'app-store-connect' }}
+        run: |
+          npm run tauri -- ios build --ci --export-method "$IOS_EXPORT_METHOD"
+          mkdir -p "$GITHUB_WORKSPACE/dist/ios"
+          find src-tauri/gen/apple/build -name '*.ipa' -exec cp {} "$GITHUB_WORKSPACE/dist/ios/" \;
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: bozkurt-mobile-ios
+          path: dist/ios/*
+          if-no-files-found: error
+
+  publish:
+    name: Attach mobile builds to the release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [android, ios]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          path: dist
+          merge-multiple: true
+      # Workflows cannot `needs:` each other: wait until release.yml for this commit has
+      # finished (draft created, desktop assets + SHA256SUMS uploaded), then add ours.
+      - name: Wait for release.yml
+        run: |
+          for _ in $(seq 1 120); do
+            state="$(gh run list --workflow release.yml --commit "$GITHUB_SHA" --limit 1 --json status,conclusion \
+              --jq '.[0] | "\(.status) \(.conclusion)"' 2>/dev/null || true)"
+            echo "release.yml: ${state:-not started}"
+            case "$state" in
+              "completed success") exit 0 ;;
+              completed*) echo "::error::release.yml finished as: $state"; exit 1 ;;
+            esac
+            sleep 60
+          done
+          echo "::error::timed out waiting for release.yml"; exit 1
+      - name: Upload APK / AAB / iOS builds
+        run: |
+          for f in dist/*; do
+            base="$(basename "$f")"
+            case "$base" in bozkurt-mobile-*) new="${base/bozkurt-mobile-/bozkurt-mobile-${TAG}-}" ;; *) new="bozkurt-mobile-${TAG}-${base}" ;; esac
+            mv "$f" "dist/$new"
+          done
+          ls -la dist
+          gh release upload "$TAG" dist/* --clobber
+      - name: Recompute SHA256SUMS
+        run: scripts/release-checksums.sh "$TAG"

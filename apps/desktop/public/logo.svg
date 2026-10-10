@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="BOZKURT CODE">
+  <title>BOZKURT CODE</title>
+  <defs>
+    <linearGradient id="bz-g" x1="12" y1="4" x2="52" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#0e7490"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#bz-g)" fill-rule="evenodd" d="M12 4 L25 19 H39 L52 4 L55 28 L61 37 L50 41 L32 60 L14 41 L3 37 L9 28 Z M16 12 L22 20 L17 25 Z M48 12 L42 20 L47 25 Z M19 31 L28 34 L20 36 Z M45 31 L36 34 L44 36 Z M27 47 H37 L32 53 Z M32 22 L35 33 L32 40 L29 33 Z"/>
+</svg>

@@ -1,0 +1,34 @@
+[workspace]
+resolver = "2"
+members = ["crates/bz-core", "crates/bz-net", "crates/bz-daemon", "crates/bz-cli", "crates/bz-mcp", "apps/desktop/src-tauri", "apps/mobile/src-tauri"]
+default-members = ["crates/bz-core", "crates/bz-net", "crates/bz-daemon", "crates/bz-cli", "crates/bz-mcp"]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/cumabozkurt/bozkurt-code"
+authors = ["Cuma Bozkurt and contributors"]
+rust-version = "1.89"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+anyhow = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json", "stream"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+sha2 = "0.10"
+hex = "0.4"
+bz-core = { path = "crates/bz-core" }
+bz-net = { path = "crates/bz-net" }
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true

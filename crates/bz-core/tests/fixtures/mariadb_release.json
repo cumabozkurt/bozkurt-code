@@ -1,0 +1,78 @@
+{
+ "release_data": {
+  "11.8.9": {
+   "release_id": "11.8.9",
+   "release_name": "MariaDB Server 11.8.9",
+   "date_of_release": "2026-08-22",
+   "release_notes_url": "",
+   "change_log": "",
+   "files": [
+    {
+     "file_name": "mariadb-11.8.9-winx64.zip",
+     "os": "Windows",
+     "cpu": "x86_64",
+     "package_type": "ZIP file",
+     "checksum": {
+      "md5sum": "4961e69c04980d475a65a228acaa6d81",
+      "sha1sum": "8fff5803b32adc2675aeb9e8294e02467c5394e6",
+      "sha256sum": "830c46727d9278eae212ae3eca44eeb9e71b2a68704e95f344a64fba7b1963f5",
+      "sha512sum": "f40a3b2c31e5bd4769bf5c4a17cddd956f29dd539d3f5bdcbb977957ac99ef09a7f19c71455901b73b9b5e5982ea71680f23d82fd7f70633f3c26b93554cd00c"
+     },
+     "file_download_url": "http://downloads.mariadb.org/rest-api/mariadb/11.8.9/mariadb-11.8.9-winx64.zip"
+    },
+    {
+     "file_name": "mariadb-11.8.9-winx64-debugsymbols.zip",
+     "os": "Windows",
+     "cpu": "x86_64",
+     "package_type": "ZIP file",
+     "checksum": {
+      "md5sum": "4dcf17c4f45e4f6afc7729e01296b163",
+      "sha1sum": "7f00efca52f9ec47783be48fc4837ee092305d01",
+      "sha256sum": "1a52319bdf3245294ee3165bc59b18cdc48f892e33a52f3c5cb71e3a5b399185",
+      "sha512sum": "f074cb1cdba88f17b228bfc79538b6f976696398bf1db42a4c62a7468f415299e9da7bce14e36d633bbd349b899cba78707badd2a8abc615afe5a57a21d23a31"
+     },
+     "file_download_url": "http://downloads.mariadb.org/rest-api/mariadb/11.8.9/mariadb-11.8.9-winx64-debugsymbols.zip"
+    },
+    {
+     "file_name": "mariadb-11.8.9.tar.gz",
+     "os": "Source",
+     "cpu": null,
+     "package_type": "gzipped tar file",
+     "checksum": {
+      "md5sum": "8b3950e7df11ec184ef997a49d47a8ff",
+      "sha1sum": "3db11ab1f8feff7b2c714c80e2f106d760fe4334",
+      "sha256sum": "2e015b7e91004142eda8b3a20d3ceb875cf2ae55e72603e7222cd497d4e56fc6",
+      "sha512sum": "8b49a3a7e9435f5732512d0fa3b06bba72422f646398ed48da142a9c00a7adbeb6c505fa18216667c00b681ef51cf694475407adf2cbcae0e8a83b76bc81265a"
+     },
+     "file_download_url": "http://downloads.mariadb.org/rest-api/mariadb/11.8.9/mariadb-11.8.9.tar.gz"
+    },
+    {
+     "file_name": "mariadb-11.8.9-linux-systemd-x86_64.tar.gz",
+     "os": "Linux",
+     "cpu": "x86_64",
+     "package_type": "gzipped tar file",
+     "checksum": {
+      "md5sum": "d805efe2530990217d9e71908f16df66",
+      "sha1sum": "49d258f4f5639146b7c5cf9228cd3ec710cafa5d",
+      "sha256sum": "32f8871a2aa38b36aa418b7f4abc6fc0c6ef1ba5a45798cacb2afa52c8a6113b",
+      "sha512sum": "c16ccf0024cee3f30dab9f4feccabee3d6ddaae5727c979108068ecd1c71b8e69d55d7153b0a3cdcdd9f201df46974344cfa4e559b91fdd6e7f3e5265ed6d364"
+     },
+     "file_download_url": "http://downloads.mariadb.org/rest-api/mariadb/11.8.9/mariadb-11.8.9-linux-systemd-x86_64.tar.gz"
+    },
+    {
+     "file_name": "mariadb-11.8.9-winx64.msi",
+     "os": "Windows",
+     "cpu": "x86_64",
+     "package_type": "MSI Package",
+     "checksum": {
+      "md5sum": "9d0e5f26e3359acaa9f2e2bfbdcd4134",
+      "sha1sum": "c912cf09d9374643bda9e944b4eac99b31498780",
+      "sha256sum": "372822572baa7f429b9068d583336a9e46b109c12bb0b24eb66dbeb6ad0a563e",
+      "sha512sum": "268c8ee41a7045ee8a4e35476c087e593ed11a637a94917ab25e7a6fff5992f08e62fab2967c7c50404376f2ed5ae86ea0ea7885fd559fe595fef87943c3a85f"
+     },
+     "file_download_url": "http://downloads.mariadb.org/rest-api/mariadb/11.8.9/mariadb-11.8.9-winx64.msi"
+    }
+   ]
+  }
+ }
+}

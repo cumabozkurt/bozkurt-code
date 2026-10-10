@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest an idea
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+  - type: checkboxes
+    id: surfaces
+    attributes:
+      label: Which surfaces does it touch?
+      options:
+        - label: Desktop app
+        - label: CLI (bz)
+        - label: MCP server (bozkurt-mcp)
+        - label: Mobile companion

@@ -1,0 +1,32 @@
+[package]
+name = "bozkurt-mobile"
+description = "BOZKURT CODE mobile companion (Tauri 2 iOS/Android shell, remote mode)"
+version.workspace = true
+edition.workspace = true
+# tauri 2.12 needs rustc 1.90; the core crates stay on 1.89.
+rust-version = "1.90"
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+[lib]
+name = "bozkurt_mobile_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "bozkurt-mobile"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+tauri-plugin-deep-link = "2"
+# `generate_context!` emits `serde_json` paths when tauri.conf.json carries plugin config.
+serde_json = { workspace = true }
+
+[target.'cfg(any(target_os = "android", target_os = "ios"))'.dependencies]
+tauri-plugin-barcode-scanner = "2"

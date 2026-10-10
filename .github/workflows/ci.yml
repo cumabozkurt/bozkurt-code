@@ -1,0 +1,176 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  RUST_BACKTRACE: short
+  # Tauri/WebKit system packages, only needed by the desktop-check job.
+  TAURI_LINUX_DEPS: >-
+    libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+    libxdo-dev libssl-dev build-essential curl wget file
+
+jobs:
+  fmt:
+    name: rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          toolchain: stable
+          components: rustfmt
+      - run: cargo fmt --all -- --check
+
+  rust:
+    name: clippy + test (${{ matrix.os }})
+    needs: fmt
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          toolchain: stable
+          components: clippy
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          shared-key: ci-${{ matrix.os }}
+      # Running at the workspace root without -p/--workspace uses
+      # `default-members` (bz-core, bz-net, bz-daemon, bz-cli, bz-mcp), so the
+      # Tauri crates (and their WebKit/WebView2 system deps) are not built here.
+      - name: clippy
+        run: cargo clippy --locked --all-targets -- -D warnings
+      - name: test
+        run: cargo test --locked --all-targets
+      - name: doc tests
+        run: cargo test --locked --doc
+
+  node:
+    name: node typecheck / build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Cache npm
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: npm-${{ runner.os }}-
+      - name: Install (npm workspaces)
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+      - name: Typecheck
+        run: npm run typecheck --workspaces --if-present
+      - name: Build
+        run: npm run build --workspaces --if-present
+
+  desktop-check:
+    name: desktop + mobile shells (cargo check, linux)
+    needs: [rust, node]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          shared-key: desktop-check
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Install Tauri system deps
+        run: |
+          sudo apt-get update
+          # shellcheck disable=SC2086
+          sudo apt-get install -y --no-install-recommends $TAURI_LINUX_DEPS
+      - name: Install (npm workspaces)
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+      - name: Build frontends (Tauri needs frontendDist at compile time)
+        run: |
+          npm run build --workspace apps/desktop --if-present
+          npm run build --workspace apps/mobile --if-present
+      # The release passes tauri.sidecar.conf.json; check with the same overlay so the
+      # externalBin list is exercised (tauri-build verifies the sidecar paths exist).
+      - name: Stub sidecars (tauri-build checks externalBin paths exist)
+        shell: bash
+        run: |
+          triple="$(rustc -vV | sed -n 's/^host: //p')"
+          mkdir -p apps/desktop/src-tauri/binaries
+          for b in bozkurtd bz bozkurt-mcp; do
+            touch "apps/desktop/src-tauri/binaries/${b}-${triple}"
+          done
+      - name: cargo check desktop (with the release sidecar overlay)
+        shell: bash
+        run: |
+          TAURI_CONFIG="$(cat apps/desktop/src-tauri/tauri.sidecar.conf.json)" \
+            cargo check --locked -p bozkurt-desktop
+      - name: cargo check mobile shell (desktop target)
+        run: cargo check --locked -p bozkurt-mobile
+
+  repo-lint:
+    name: workflows, scripts, docs, versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Version strings agree
+        run: node scripts/check-versions.mjs
+      - name: actionlint (+ shellcheck of run blocks)
+        run: |
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.7/scripts/download-actionlint.bash) 1.7.7
+          ./actionlint -color
+      - name: shellcheck scripts
+        run: shellcheck -s sh scripts/install.sh && shellcheck scripts/release-checksums.sh
+      - name: PSScriptAnalyzer (install.ps1)
+        shell: pwsh
+        run: |
+          $r = Invoke-ScriptAnalyzer -Path scripts/install.ps1 -Severity Error,Warning
+          $r | Format-Table -AutoSize
+          if ($r | Where-Object Severity -eq 'Error') { exit 1 }
+      - name: JSON configs parse
+        run: |
+          for f in apps/*/src-tauri/tauri*.conf.json apps/*/src-tauri/capabilities/*.json package.json apps/*/package.json packages/*/package.json; do
+            node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$f" || { echo "::error file=$f::invalid JSON"; exit 1; }
+          done
+      - name: Markdown links and anchors
+        run: python3 scripts/check-md-links.py
+
+  ci-ok:
+    name: CI result
+    if: always()
+    needs: [fmt, rust, node, desktop-check, repo-lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All required jobs passed
+        shell: bash
+        run: |
+          [ "${{ needs.fmt.result }}" = success ] &&
+          [ "${{ needs.rust.result }}" = success ] &&
+          [ "${{ needs.node.result }}" = success ] &&
+          [ "${{ needs.desktop-check.result }}" = success ] &&
+          [ "${{ needs.repo-lint.result }}" = success ]

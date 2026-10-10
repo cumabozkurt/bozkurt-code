@@ -1,0 +1,38 @@
+name: Bug report
+description: Something is broken
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. bz link ~/code/shop
+        2. open https://shop.test
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `bz doctor`
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: Version (`bz --version`)
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [macOS (Apple Silicon), macOS (Intel), Linux x86_64, Linux arm64, Windows x64, Android, iOS]
+    validations:
+      required: true

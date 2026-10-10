@@ -49,7 +49,8 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-          cache: gradle
+          # no `cache: gradle`: the Gradle project is generated later by `tauri android init`,
+          # and setup-java fails when it finds no gradle files to key the cache on
 
       - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
 
@@ -135,28 +136,41 @@ jobs:
     runs-on: macos-latest
     env:
       HAS_IOS_SIGNING: ${{ secrets.IOS_CERTIFICATE != '' && secrets.IOS_MOBILE_PROVISION != '' && secrets.APPLE_DEVELOPMENT_TEAM != '' }}
+      # `tauri ios init` refuses to generate the Xcode project without a development team
+      # ("apple.development-team is empty"), even for the unsigned simulator build.
+      HAS_APPLE_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM != '' }}
     steps:
+      - name: Skip notice (no APPLE_DEVELOPMENT_TEAM secret)
+        if: env.HAS_APPLE_TEAM != 'true'
+        run: echo "::notice::iOS build skipped - set the APPLE_DEVELOPMENT_TEAM secret to build the iOS app"
+
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        if: env.HAS_APPLE_TEAM == 'true'
 
       - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        if: env.HAS_APPLE_TEAM == 'true'
         with:
           toolchain: stable
           targets: aarch64-apple-ios,aarch64-apple-ios-sim
 
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        if: env.HAS_APPLE_TEAM == 'true'
         with:
           shared-key: mobile-ios
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        if: env.HAS_APPLE_TEAM == 'true'
         with:
           node-version: 22
 
       - name: Install npm dependencies
+        if: env.HAS_APPLE_TEAM == 'true'
         shell: bash
         run: |
           if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
 
       - name: Generate Xcode project
+        if: env.HAS_APPLE_TEAM == 'true'
         working-directory: ${{ env.MOBILE_DIR }}
         env:
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
@@ -168,7 +182,7 @@ jobs:
       # phase (`tauri ios xcode-script`) needs options written by a parent
       # `tauri ios build|dev`, so a bare xcodebuild cannot build it.
       - name: Build unsigned simulator app
-        if: env.HAS_IOS_SIGNING != 'true'
+        if: env.HAS_APPLE_TEAM == 'true' && env.HAS_IOS_SIGNING != 'true'
         working-directory: ${{ env.MOBILE_DIR }}
         run: |
           npm run tauri -- ios build --target aarch64-sim --debug --ci
@@ -214,6 +228,7 @@ jobs:
           find src-tauri/gen/apple/build -name '*.ipa' -exec cp {} "$GITHUB_WORKSPACE/dist/ios/" \;
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: env.HAS_APPLE_TEAM == 'true'
         with:
           name: bozkurt-mobile-ios
           path: dist/ios/*

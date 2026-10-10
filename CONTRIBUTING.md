@@ -163,7 +163,7 @@ unsigned builds. Set these under *Settings → Secrets and variables → Actions
 | `ANDROID_KEYSTORE_PASSWORD` | mobile | Android signing | Keystore password |
 | `ANDROID_KEY_ALIAS` | mobile | Android signing | Key alias inside the keystore |
 | `ANDROID_KEY_PASSWORD` | mobile | Android signing | Key password |
-| `IOS_CERTIFICATE` | mobile | Signed iOS IPA | Base64 of an Apple distribution/development `.p12`. All three of `IOS_CERTIFICATE`, `IOS_MOBILE_PROVISION` and `APPLE_DEVELOPMENT_TEAM` are required, otherwise an unsigned **simulator** build is produced. |
+| `IOS_CERTIFICATE` | mobile | Signed iOS IPA | Base64 of an Apple distribution/development `.p12`. All three of `IOS_CERTIFICATE`, `IOS_MOBILE_PROVISION` and `APPLE_DEVELOPMENT_TEAM` are required, otherwise an unsigned **simulator** build is produced (that one still needs `APPLE_DEVELOPMENT_TEAM`; without it the iOS job is skipped with a notice). |
 | `IOS_CERTIFICATE_PASSWORD` | mobile | Signed iOS IPA | Password of the `.p12` |
 | `IOS_MOBILE_PROVISION` | mobile | Signed iOS IPA | Base64 of the `.mobileprovision` |
 | `APPLE_DEVELOPMENT_TEAM` | mobile | `tauri ios init` / signed IPA | Team ID |

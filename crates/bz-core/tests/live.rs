@@ -206,7 +206,8 @@ async fn php_site_via_fpm() {
         .await
         .unwrap();
     for job in [
-        e.install_runtime(RuntimeKind::Php, "8.4"),
+        // static-php.dev publishes no checksums: opt in once (TOFU pin), like `--allow-unverified`.
+        e.install_runtime_with(RuntimeKind::Php, "8.4", true),
         e.install_service("caddy", None).unwrap(),
     ] {
         let done = e

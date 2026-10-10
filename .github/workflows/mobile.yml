@@ -20,6 +20,11 @@ on:
       - "packages/ui/**"
       - ".github/workflows/mobile.yml"
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Optional existing release tag (e.g. v1.0.0) to attach the mobile builds to"
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -53,6 +58,9 @@ jobs:
           # and setup-java fails when it finds no gradle files to key the cache on
 
       - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        with:
+          # the default ("tools platform-tools") fails: the legacy `tools` package no longer exists
+          packages: platform-tools
 
       - name: Install SDK platform, build-tools and NDK
         run: |
@@ -236,7 +244,7 @@ jobs:
 
   publish:
     name: Attach mobile builds to the release
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.release_tag != ''
     needs: [android, ios]
     runs-on: ubuntu-latest
     permissions:
@@ -245,7 +253,7 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_REPO: ${{ github.repository }}
-      TAG: ${{ github.ref_name }}
+      TAG: ${{ github.event.inputs.release_tag || github.ref_name }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
@@ -256,8 +264,10 @@ jobs:
       # finished (draft created, desktop assets + SHA256SUMS uploaded), then add ours.
       - name: Wait for release.yml
         run: |
+          # the commit the tag points at (equals GITHUB_SHA on tag pushes; differs on manual dispatch)
+          sha="$(gh api "repos/$GH_REPO/commits/$TAG" --jq .sha)"
           for _ in $(seq 1 120); do
-            state="$(gh run list --workflow release.yml --commit "$GITHUB_SHA" --limit 1 --json status,conclusion \
+            state="$(gh run list --workflow release.yml --commit "$sha" --limit 1 --json status,conclusion \
               --jq '.[0] | "\(.status) \(.conclusion)"' 2>/dev/null || true)"
             echo "release.yml: ${state:-not started}"
             case "$state" in

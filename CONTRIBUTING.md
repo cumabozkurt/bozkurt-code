@@ -140,7 +140,8 @@ Pushing a tag `v*` (or running **Release** manually with an existing tag) runs `
    endpoint and the install one-liners) point at it.
 
 The same tag also runs `.github/workflows/mobile.yml`, which attaches the Android APK/AAB and the iOS build to the same
-release and recomputes `SHA256SUMS`.
+release and recomputes `SHA256SUMS`. To (re)attach mobile builds to an existing release later, run
+`gh workflow run mobile.yml -f release_tag=vX.Y.Z` (it waits for that tag's release workflow first).
 
 ### Release signing secrets
 
@@ -159,14 +160,14 @@ unsigned builds. Set these under *Settings → Secrets and variables → Actions
 | `APPLE_TEAM_ID` | release | Notarization | 10-character team ID |
 | `WINDOWS_CERTIFICATE` | release | Authenticode signing of msi/nsis | Base64 of a `.pfx`. It is imported to `CurrentUser\My`, and its thumbprint is passed to Tauri with SHA-256 digest and the DigiCert timestamp server. |
 | `WINDOWS_CERTIFICATE_PASSWORD` | release | Authenticode signing | Password of the `.pfx` |
-| `ANDROID_KEYSTORE` | mobile | Signing the APK (zipalign + apksigner) and AAB (jarsigner) | Base64 of a `.jks` keystore. Without it the APK/AAB are uploaded unsigned. |
+| `ANDROID_KEYSTORE` | mobile | Signing the APK (zipalign + apksigner) and AAB (jarsigner) | Base64 of a `.jks` keystore. Without it the APK/AAB are uploaded unsigned, plus a `*-sideload.apk` signed with a throwaway key generated on the runner (installable by sideloading; a later build signed with a different key needs an uninstall first, so set a real keystore before shipping updates). |
 | `ANDROID_KEYSTORE_PASSWORD` | mobile | Android signing | Keystore password |
 | `ANDROID_KEY_ALIAS` | mobile | Android signing | Key alias inside the keystore |
 | `ANDROID_KEY_PASSWORD` | mobile | Android signing | Key password |
-| `IOS_CERTIFICATE` | mobile | Signed iOS IPA | Base64 of an Apple distribution/development `.p12`. All three of `IOS_CERTIFICATE`, `IOS_MOBILE_PROVISION` and `APPLE_DEVELOPMENT_TEAM` are required, otherwise an unsigned **simulator** build is produced (that one still needs `APPLE_DEVELOPMENT_TEAM`; without it the iOS job is skipped with a notice). |
+| `IOS_CERTIFICATE` | mobile | Signed iOS IPA | Base64 of an Apple distribution/development `.p12`. All three of `IOS_CERTIFICATE`, `IOS_MOBILE_PROVISION` and `APPLE_DEVELOPMENT_TEAM` are required, otherwise an unsigned **simulator** build is produced (without `APPLE_DEVELOPMENT_TEAM` a placeholder team id is used only to generate the Xcode project; simulator builds are not signed). |
 | `IOS_CERTIFICATE_PASSWORD` | mobile | Signed iOS IPA | Password of the `.p12` |
 | `IOS_MOBILE_PROVISION` | mobile | Signed iOS IPA | Base64 of the `.mobileprovision` |
-| `APPLE_DEVELOPMENT_TEAM` | mobile | `tauri ios init` / signed IPA | Team ID |
+| `APPLE_DEVELOPMENT_TEAM` | mobile | Signed IPA (and the real team id in the generated Xcode project) | Team ID |
 
 | `TAURI_SIGNING_PRIVATE_KEY` | release | Signing updater artifacts (`.sig`, `latest.json`) | Private key from `npm run tauri -w @bozkurt/desktop -- signer generate -w ~/.tauri/bozkurt.key`. Back it up offline: losing it means existing installs can no longer verify updates. |
 | `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | release | Updater signing | Password of that key |
